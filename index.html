@@ -47,9 +47,9 @@
     const defaultPhoto = "photos/default.jpg";
 
     const staff = [
-      { name: "Timothy Antoine", dept: "Executive Committee (EC)", ext: "3100", Job: "Governor"},
-      { name: "Valda Henry", dept: "Executive Committee (EC)", ext: "3102", Job: "Deputy Governor"},
-      { name: "Tracy Polius", dept: "Executive Committee (EC)", ext: "3104", Job: "Chief, Director Policy "},
+      { name: "Timothy Antoine", dept: "Executive Committee (EC)", ext: "3100", Job: "Governor" },
+      { name: "Valda Henry", dept: "Executive Committee (EC)", ext: "3102", Job: "Deputy Governor" },
+      { name: "Tracy Polius", dept: "Executive Committee (EC)", ext: "3104", Job: "Chief, Director Policy" },
       { name: "Abielle Griffith", dept: "D", ext: "3306" },
       { name: "Abigail Jeffers", dept: "Office of Risk Management Department", ext: "3205" },
       { name: "Acklyn Blaize", dept: "Corporate Governance Unit", ext: "3154" },
@@ -379,15 +379,16 @@
     });
 
     function showDetails(person) {
-      document.getElementById("personName").textContent = person.name;
-      document.getElementById("personDept").textContent = person.dept;
-      document.getElementById("personExt").textContent = person.ext;
-      document.getElementById("personJobTitle").textContent = person.job;
+    document.getElementById("personName").textContent = person.name;
+    document.getElementById("personDept").textContent = person.dept;
+    document.getElementById("personExt").textContent = person.ext;
+    document.getElementById("personJobTitle").textContent = person.job || "N/A";
+
+    // Show photo
+    const photoPath = `photos/${person.name.replace(/\s+/g, "_")}.jpg`;
+    document.getElementById("personPhoto").src = photoPath;
+    document.getElementById("personPhoto").alt = person.name;
       
-      const photoFile = "photos/" + person.name.replace(/ /g, "_") + ".jpg";
-      const img = document.getElementById("personPhoto");
-      img.src = photoFile;
-      img.onerror = () => { img.src = defaultPhoto; };
 
       document.getElementById("details").style.display = "block";
     }
