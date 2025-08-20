@@ -46,9 +46,14 @@
 
 
   <script>
-    const defaultPhoto = "photos/default.jpg";
+const defaultPhoto = "photos/default.jpg";
 
-    const staff = [
+const staff = [
+  { name: "Jarod Prince", dept: "nan", ext: "3827", mobile: "869-555-1111" },
+  { name: "Valda Henry", dept: "Finance", ext: "3102", mobile: "869-555-2222" },
+  { name: "Jarod Prince", dept: "nan", ext: "3827", mobile: "869-555-1111" }, // duplicate
+  { name: "Timothy Antoine", dept: "Executive", ext: "3100", mobile: "869-555-3333" },
+  
       { name: "Timothy Antoine", dept: "Executive Committee ", ext: "3100", job: "Governor" },
       { name: "Valda Henry", dept: "Executive Committee ", ext: "3102", job: "Deputy Governor" },
       { name: "Tracy Polius", dept: "Executive Committee ", ext: "3104", job: "Chief, Director Policy" },
@@ -485,7 +490,23 @@
     function normalize(str) {
       return str.toLowerCase().replace(/[^a-z0-9]/g, '');
     }
+function removeDuplicates(array) {
+  let unique = [];
+  let seen = new Set();
 
+  array.forEach(item => {
+    let key = item.name + "|" + item.ext; // unique combo
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(item);
+    }
+  });
+
+  return unique;
+}
+
+let cleanedStaff = removeDuplicates(staff);
+console.log(cleanedStaff); // ✅ no duplicates
     document.getElementById("searchInput").addEventListener("input", function() {
       const query = normalize(this.value);
       const resultsDiv = document.getElementById("results");
