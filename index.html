@@ -382,7 +382,7 @@
       document.getElementById("personName").textContent = person.name;
       document.getElementById("personDept").textContent = person.dept;
       document.getElementById("personExt").textContent = person.ext;
-      document.getElementById("personJobTitle").textContent = person.job || "N/A";
+      document.getElementById("personJobTitle").textContent = person.job;
       
       const photoFile = "photos/" + person.name.replace(/ /g, "_") + ".jpg";
       const img = document.getElementById("personPhoto");
