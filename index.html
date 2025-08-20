@@ -39,8 +39,8 @@
     <h2 id="personName"></h2>
     <p><b>Department:</b> <span id="personDept"></span></p>
     <p><b>Job Title:</b> <span id="personJobTitle"></span></p>
-    <p><b>Mobile:</b> <span id="personCell"></span></p>
-    <p><b>Ext:</b> <span id="personExt"></span></p>
+    <p><b>Cellphone:</b> <span id="personCell"></span></p>
+    <p><b>ext:</b> <span id="personExt"></span></p>
   </div>
 
 
@@ -447,7 +447,7 @@
       {name: "Sheon John", dept: "Governor's Office", ext: "3101"},
       {name: "Sherizan Mills", dept: "nan", ext: "3860"},
       {name: "Sherma John", dept: "Corporate Relations Department", ext: "3728"},
-      {name: "Shermalon Kirby", dept: "Corporate Relations Department", ext: "3943",job: "Director", cell: "+1 869 665 2561" },
+      {name: "Shermalon Kirby", dept: "Corporate Relations Department", ext: "3943",job: "Director", cell: "+1 869 6652 2561" },
       {name: "Shernelle Phillip", dept: "Internal Audit Department", ext: "3122"},
       {name: "Shernnel Thompson", dept: "Research Statistics and Data Analytics Department", ext: "3903"},
       {name: "Shervone Alexander", dept: "Advisory Services", ext: "3556"},
@@ -523,7 +523,7 @@
     document.getElementById("personDept").textContent = person.dept;
     document.getElementById("personExt").textContent = person.ext;
     document.getElementById("personJobTitle").textContent = person.job;
-    document.getElementById("personMobile").textContent = person.cell 
+    document.getElementById("personCell").textContent = person.cell 
 
     // Show photo
     const photoPath = `photos/${person.name.replace(/\s+/g, "_")}.jpg`;
