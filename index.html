@@ -29,7 +29,7 @@
   }
 </style>
 
- <div class="search-box">
+  <div class="search-box">
     <input type="text" id="searchInput" placeholder="Search by name, dept, or abbreviation...">
   </div>
 
@@ -42,11 +42,6 @@
     <p><b>Mobile:</b> <span id="personMobile"></span></p>
     <p><b>Ext.:</b> <span id="personExt"></span></p>
    
-  <h2>Departments</h2>
-  <div id="departments"></div>
-  <hr>
-
- 
   </div>
 
 
@@ -366,46 +361,6 @@ const staff = [
       {name: "Zimran Leon", dept: "Human Resources Department", ext: "3267", job: "Human Resources Officer" },
       {name: "Zoe Liburd", dept: "Banking and Monetary Operations Department", ext: "3601", job: "Administrative Professional" }
               ];
-
-// ✅ Build unique list of departments from staff array
-function buildDepartmentList() {
-    const deptContainer = document.getElementById("departments");
-    const departments = [...new Set(staff.map(person => person.dept).filter(d => d && d !== "nan"))].sort();
-
-    departments.forEach(dept => {
-        const div = document.createElement("div");
-        div.classList.add("dept-item");
-        div.textContent = dept;
-        div.onclick = () => showDepartment(dept);
-        deptContainer.appendChild(div);
-    });
-}
-
-// ✅ Show all staff in a department
-function showDepartment(deptName) {
-    const resultsContainer = document.getElementById("results");
-    resultsContainer.innerHTML = `<h3>${deptName}</h3>`;
-
-    const results = staff.filter(person => person.dept === deptName);
-
-    if (results.length === 0) {
-        resultsContainer.innerHTML += "<p>No staff found in this department.</p>";
-    } else {
-        results.forEach(person => {
-            const div = document.createElement("div");
-            div.classList.add("result-item");
-            div.textContent = `${person.name} - Ext: ${person.ext}`;
-            div.onclick = () => showDetails(person);
-            resultsContainer.appendChild(div);
-        });
-    }
-}
-
-// ✅ Run department builder on page load
-window.onload = () => {
-    buildDepartmentList();
-};
-
 
     function normalize(str) {
       return str.toLowerCase().replace(/[^a-z0-9]/g, '');
