@@ -2,48 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ECCB Internal Directory</title>
+  <title>ECCB Staff Directory</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f8fc; }
-    header { background: #003366; padding: 10px; text-align: center; }
-    header img { height: 80px; cursor: pointer; }
-    .search-box { margin: 20px auto; text-align: center; }
-    input[type="text"] { width: 60%; padding: 10px; font-size: 16px; border: 2px solid #003366; border-radius: 6px; }
-    #results { margin: 20px auto; width: 80%; }
-    .result-item { padding: 12px; margin-bottom: 8px; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; }
-    .highlight { background-color: #cce0ff; }
-    #details { margin: 20px auto; width: 60%; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); display: none; }
-    #details img { max-width: 200px; display: block; margin: 0 auto 15px; border-radius: 8px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      text-align: center;
+      color: #004080;
+    }
+
+    #searchBar {
+      width: 100%;
+      max-width: 500px;
+      display: block;
+      margin: 0 auto 20px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .department-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .department-item {
+      background: #004080;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .department-item:hover {
+      background: #0066cc;
+    }
+
+    #results {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .staff-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .staff-item:last-child {
+      border-bottom: none;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <img src="ECCB Logo BEst .png" alt="ECCB Logo" onclick="location.reload()">
-  </header>
-    <h1>ECCB Internal Directory</h1>
-    <style>
-  h1 {
-    color: darkblue;
-    text-align: center;
-    margin-top: 20px;
-  }
-</style>
+  <h1>ECCB Staff Directory</h1>
 
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search by name, dept, or abbreviation...">
-  </div>
+  <!-- Search Bar -->
+  <input type="text" id="searchBar" placeholder="Search by name, department, or abbreviation...">
 
+  <!-- Department List -->
+  <div class="department-list" id="departmentList"></div>
+
+  <!-- Results Section -->
   <div id="results"></div>
-  <div id="details">
-    <img id="personPhoto" src="" alt="Photo">
-    <h2 id="personName"></h2>
-    <p><b>Department:</b> <span id="personDept"></span></p>
-    <p><b>Job Title:</b> <span id="personJobTitle"></span></p>
-    <p><b>Mobile:</b> <span id="personMobile"></span></p>
-    <p><b>Ext.:</b> <span id="personExt"></span></p>
-   
-  </div>
-
 
   <script>
 const defaultPhoto = "photos/default.jpg";
@@ -362,97 +394,65 @@ const staff = [
       {name: "Zoe Liburd", dept: "Banking and Monetary Operations Department", ext: "3601", job: "Administrative Professional" }
               ];
 
-    function normalize(str) {
-      return str.toLowerCase().replace(/[^a-z0-9]/g, '');
-    }
-function removeDuplicates(array) {
-  let unique = [];
-  let seen = new Set();
+    const departments = [...new Set(
+      staff
+        .map(s => s.dept)
+        .filter(d => d && d.toLowerCase() !== "nan" && d.toLowerCase() !== "d")
+    )].sort();
 
-  array.forEach(item => {
-    let key = item.name + "|" + item.ext; // unique combo
-    if (!seen.has(key)) {
-      seen.add(key);
-      unique.push(item);
-    }
-  });
+    const deptListDiv = document.getElementById("departmentList");
+    const resultsDiv = document.getElementById("results");
+    const searchBar = document.getElementById("searchBar");
 
-  return unique;
-}
-
-let cleanedStaff = removeDuplicates(staff);
-console.log(cleanedStaff); // ✅ no duplicates
-    document.getElementById("searchInput").addEventListener("input", function() {
-      const query = normalize(this.value);
-      const resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "";
-      if (!query) return;
-
-      const matches = staff.filter(person => 
-        normalize(person.name).includes(query) ||
-        normalize(person.dept).includes(query)
-      );
-
-      matches.forEach(person => {
-        const div = document.createElement("div");
-        div.className = "result-item";
-        div.textContent = person.name + " (" + person.dept + ")";
-        div.onclick = () => showDetails(person);
-        resultsDiv.appendChild(div);
-      });
+    // Populate departments on homepage
+    departments.forEach(dept => {
+      const div = document.createElement("div");
+      div.className = "department-item";
+      div.textContent = dept;
+      div.onclick = () => showDepartment(dept);
+      deptListDiv.appendChild(div);
     });
 
-   function searchDirectory() {
-    const query = document.getElementById("searchInput").value.toLowerCase();
-    const resultsContainer = document.getElementById("results");
-    resultsContainer.innerHTML = "";
-
-    if (query.trim() === "") {
-        return; // Don’t show anything if search is empty
+    // Show all staff in a department
+    function showDepartment(dept) {
+      resultsDiv.innerHTML = `<h2>${dept}</h2>`;
+      const deptStaff = staff.filter(s => s.dept === dept);
+      deptStaff.forEach(s => {
+        resultsDiv.innerHTML += `
+          <div class="staff-item">
+            <b>${s.name}</b> — Ext: ${s.ext}
+          </div>`;
+      });
     }
 
-    const results = staff.filter(person => 
-        (person.name && person.name.toLowerCase().includes(query)) ||
-        (person.dept && person.dept.toLowerCase().includes(query)) ||
-        (person.job && person.job.toLowerCase().includes(query)) ||
-        (person.cell && person.cell.toLowerCase().includes(query))
-    );
+    // Search function (by name, dept, or abbreviation)
+    searchBar.addEventListener("input", () => {
+      const query = searchBar.value.toLowerCase();
+      resultsDiv.innerHTML = "";
 
-    if (results.length === 0) {
-        resultsContainer.innerHTML = "<p>No results found.</p>";
-    } else {
-        results.forEach(person => {
-            const div = document.createElement("div");
-            div.classList.add("result-item");
+      if (query.trim() === "") return;
 
-            // Build highlighted text
-            const fullText = `${person.name} - ${person.dept} - ${person.job || ""}`;
-            const regex = new RegExp(`(${query})`, "gi");
-            const highlightedText = fullText.replace(regex, "<b>$1</b>");
+      const matches = staff.filter(s =>
+        s.name.toLowerCase().includes(query) ||
+        s.dept.toLowerCase().includes(query) ||
+        getAbbreviation(s.dept).toLowerCase().includes(query)
+      );
 
-            div.innerHTML = highlightedText;
-            div.onclick = () => showDetails(person);
-            resultsContainer.appendChild(div);
+      if (matches.length === 0) {
+        resultsDiv.innerHTML = "<p>No results found.</p>";
+      } else {
+        matches.forEach(s => {
+          resultsDiv.innerHTML += `
+            <div class="staff-item">
+              <b>${s.name}</b> — ${s.dept} — Ext: ${s.ext}
+            </div>`;
         });
-    }
-}
+      }
+    });
 
-    
-    function showDetails(person) {
-    document.getElementById("personName").textContent = person.name;
-    document.getElementById("personDept").textContent = person.dept;
-    document.getElementById("personJobTitle").textContent = person.job;
-    document.getElementById("personExt").textContent = person.ext;
-    document.getElementById("personMobile").textContent = person.mobile;
-
-
-    // Show photo
-    const photoPath = `photos/${person.name.replace(/\s+/g, "_")}.jpg`;
-    document.getElementById("personPhoto").src = photoPath;
-    document.getElementById("personPhoto").alt = person.name;
-      
-
-      document.getElementById("details").style.display = "block";
+    // Auto-generate department abbreviation (first letters of each word)
+    function getAbbreviation(dept) {
+      return dept.split(" ").map(word => word[0]).join("");
     }
   </script>
 </body>
