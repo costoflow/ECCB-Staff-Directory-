@@ -2,80 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ECCB Staff Directory</title>
+  <title>ECCB Internal Directory</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f5f5f5;
-    }
-
-    h1 {
-      text-align: center;
-      color: #004080;
-    }
-
-    #searchBar {
-      width: 100%;
-      max-width: 500px;
-      display: block;
-      margin: 0 auto 20px;
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    .department-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 30px;
-    }
-
-    .department-item {
-      background: #004080;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s;
-    }
-
-    .department-item:hover {
-      background: #0066cc;
-    }
-
-    #results {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    }
-
-    .staff-item {
-      padding: 8px 0;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .staff-item:last-child {
-      border-bottom: none;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f8fc; }
+    header { background: #003366; padding: 10px; text-align: center; }
+    header img { height: 80px; cursor: pointer; }
+    .search-box { margin: 20px auto; text-align: center; }
+    input[type="text"] { width: 60%; padding: 10px; font-size: 16px; border: 2px solid #003366; border-radius: 6px; }
+    #results { margin: 20px auto; width: 80%; }
+    .result-item { padding: 12px; margin-bottom: 8px; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; }
+    .highlight { background-color: #cce0ff; }
+    #details { margin: 20px auto; width: 60%; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); display: none; }
+    #details img { max-width: 200px; display: block; margin: 0 auto 15px; border-radius: 8px; }
   </style>
 </head>
 <body>
-  <h1>ECCB Staff Directory</h1>
+  <header>
+    <img src="ECCB Logo BEst .png" alt="ECCB Logo" onclick="location.reload()">
+  </header>
+    <h1>ECCB Internal Directory</h1>
+    <style>
+  h1 {
+    color: darkblue;
+    text-align: center;
+    margin-top: 20px;
+  }
+</style>
 
-  <!-- Search Bar -->
-  <input type="text" id="searchBar" placeholder="Search by name, department, or abbreviation...">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by name, dept, or abbreviation...">
+  </div>
 
-  <!-- Department List -->
-  <div class="department-list" id="departmentList"></div>
-
-  <!-- Results Section -->
   <div id="results"></div>
+  <div id="details">
+    <img id="personPhoto" src="" alt="Photo">
+    <h2 id="personName"></h2>
+    <p><b>Department:</b> <span id="personDept"></span></p>
+    <p><b>Job Title:</b> <span id="personJobTitle"></span></p>
+    <p><b>Mobile:</b> <span id="personMobile"></span></p>
+    <p><b>Ext.:</b> <span id="personExt"></span></p>
+   
+  </div>
+
 
   <script>
 const defaultPhoto = "photos/default.jpg";
